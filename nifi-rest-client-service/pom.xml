@@ -15,9 +15,13 @@
     <packaging>jar</packaging>
 
     <dependencies>
-	<dependency>
-		<groupId>org.apache.nifi</groupId>
-		<artifactId>nifi-rest-client-service-api</artifactId>
-	</dependency>
+        <dependency>
+            <groupId>org.apache.nifi</groupId>
+            <artifactId>nifi-rest-client-service-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+        </dependency>
     </dependencies>
 </project>
