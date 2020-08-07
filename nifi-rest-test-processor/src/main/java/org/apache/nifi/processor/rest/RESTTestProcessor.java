@@ -1,9 +1,13 @@
 package org.apache.nifi.processor.rest;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.apache.nifi.annotation.behavior.InputRequirement;
 import org.apache.nifi.annotation.lifecycle.OnScheduled;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.controllers.rest.RESTClientProviderService;
+import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.processor.AbstractProcessor;
 import org.apache.nifi.processor.ProcessContext;
 import org.apache.nifi.processor.ProcessSession;
@@ -47,7 +51,30 @@ public class RESTTestProcessor extends AbstractProcessor {
     }
 
     @Override
-    public void onTrigger(ProcessContext processContext, ProcessSession processSession) throws ProcessException {
+    public void onTrigger(ProcessContext context, ProcessSession session) throws ProcessException {
+        FlowFile input = session.get();
+        if (input == null) {
+            return;
+        }
 
+        OkHttpClient client = restProviderService.getClient();
+
+        try {
+            String url = input.getAttribute("url");
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .get()
+                    .build();
+            Response response = client.newCall(request).execute();
+            if (response.code() >= 200 && response.code() < 300) {
+                session.transfer(input, SUCCESS);
+            } else {
+                session.transfer(input, FAIL);
+            }
+        } catch (Exception ex) {
+            getLogger().error("", ex);
+            session.transfer(input, FAIL);
+        }
     }
 }
