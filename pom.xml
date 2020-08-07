@@ -20,6 +20,8 @@
         <module>nifi-rest-client-service</module>
         <module>nifi-rest-client-service-api-nar</module>
         <module>nifi-rest-client-service-nar</module>
+        <module>nifi-rest-test-processor</module>
+        <module>nifi-rest-test-nar</module>
     </modules>
 
     <dependencyManagement>
@@ -34,6 +36,12 @@
                 <groupId>org.apache.nifi</groupId>
                 <artifactId>nifi-web-utils</artifactId>
                 <version>${nifi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.nifi</groupId>
+                <artifactId>nifi-rest-test-processor</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
